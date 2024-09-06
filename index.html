@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Control</title>
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="login.css">
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <style>
+        /* Add styles to ensure the button is visible */
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo-container">
+                <img src="traffic-jam.png" alt="Logo" class="logo">
+                <h1>SmartSignal</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#">About</a></li>
+                <li><a href="#">Survey</a></li>
+                <li><a href="#" id="login-link">Login</a>
+                    <div class="login-popup">
+                        <form>
+                            <label for="username">Username:</label>
+                            <input type="text" id="username" name="username"><br><br>
+                            <label for="password">Password:</label>
+                            <input type="password" id="password" name="password"><br><br>
+                            <button type="submit"><a href="login.html">Login</a></button>
+                        </form>
+                    </div>
+                </li>
+                <li><a href="#">Help</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="container">
+        <img src="intersection.jpg" alt="Intersection" id="background-image">
+
+        <!-- Traffic lights -->
+        <div id="a1" class="traffic-light">
+            <div class="light"></div>
+        </div>
+
+        <div id="a2" class="traffic-light">
+            <div class="light"></div>
+        </div>
+
+        <div id="a3" class="traffic-light">
+            <div class="light"></div>
+        </div>
+
+        <div id="a4" class="traffic-light">
+            <div class="light"></div>
+        </div>
+
+        <!-- Vehicle counts and flow rates -->
+        <div id="box-top" class="side-box">
+            <p>Number of vehicles: <span id="vehicles1">15</span></p>
+            <p>Control flow rate: 
+                <input type="number" id="flow1" value="1.6" min="0" step="0.1">
+            </p>
+            <p>Timer: <span id="timer1">00:00</span></p>
+        </div>
+        <div id="box-bottom" class="side-box">
+            <p>Number of vehicles: <span id="vehicles2">18</span></p>
+            <p>Control flow rate: 
+                <input type="number" id="flow2" value="1.5" min="0" step="0.1">
+            </p>
+            <p>Timer: <span id="timer2">00:00</span></p>
+        </div>
+        <div id="box-left" class="side-box">
+            <p>Number of vehicles: <span id="vehicles3">10</span></p>
+            <p>Control flow rate: 
+                <input type="number" id="flow3" value="1.2" min="0" step="0.1">
+            </p>
+            <p>Timer: <span id="timer3">00:00</span></p>
+        </div>
+        <div id="box-right" class="side-box">
+            <p>Number of vehicles: <span id="vehicles4">5</span></p>
+            <p>Control flow rate: 
+                <input type="number" id="flow4" value="1.0" min="0" step="0.1">
+            </p>
+            <p>Timer: <span id="timer4">00:00</span></p>
+        </div>
+    </div>
+
+    <button onclick="startSystem()">Start System</button>
+
+    <script>
+        let lane1 = 15;
+        let lane2 = 18;
+        let lane3 = 10;
+        let lane4 = 5;
+        const avg_time = 2;
+        const no_of_lane = 3;
+        let currentLane = 0;
+
+        function update() {
+            let flow_rate1 = parseFloat(document.getElementById('flow1').value);
+            let flow_rate2 = parseFloat(document.getElementById('flow2').value);
+            let flow_rate3 = parseFloat(document.getElementById('flow3').value);
+            let flow_rate4 = parseFloat(document.getElementById('flow4').value);
+
+            lane1 += flow_rate1;
+            lane2 += flow_rate2;
+            lane3 += flow_rate3;
+            lane4 += flow_rate4;
+
+            document.getElementById('vehicles1').innerText = Math.floor(lane1);
+            document.getElementById('vehicles2').innerText = Math.floor(lane2);
+            document.getElementById('vehicles3').innerText = Math.floor(lane3);
+            document.getElementById('vehicles4').innerText = Math.floor(lane4);
+        }
+
+        function decrement(decrementValue) {
+            switch (currentLane) {
+                case 0: lane1 = Math.max(0, lane1 - decrementValue); break;
+                case 1: lane2 = Math.max(0, lane2 - decrementValue); break;
+                case 2: lane3 = Math.max(0, lane3 - decrementValue); break;
+                case 3: lane4 = Math.max(0, lane4 - decrementValue); break;
+            }
+        }
+
+        function updateTrafficLights() {
+            const trafficLights = ['a1', 'a2', 'a3', 'a4'];
+            const colors = ['red', 'yellow', 'green'];
+            for (let i = 0; i < 4; i++) {
+                const light = document.querySelector(`#${trafficLights[i]} .light`);
+                light.className = 'light ' + (i === currentLane ? colors[2] : colors[0]);
+            }
+        }
+
+        function greenLight() {
+            const lanes = [lane1, lane2, lane3, lane4];
+            const flow_rates = [
+                parseFloat(document.getElementById('flow1').value),
+                parseFloat(document.getElementById('flow2').value),
+                parseFloat(document.getElementById('flow3').value),
+                parseFloat(document.getElementById('flow4').value)
+            ];
+
+            const glt = Math.max(1, Math.floor(lanes[currentLane] * avg_time / (no_of_lane + 5)) - 1);
+            const decrementValue = lanes[currentLane] / (glt + 1);
+
+            let duration = glt;
+            let intervalId = setInterval(() => {
+                document.getElementById('timer' + (currentLane + 1)).innerText = Math.floor(duration / 60) + ':' + (duration % 60).toString().padStart(2, '0');
+                decrement(decrementValue);
+                update();
+                if (duration === 0) {
+                    clearInterval(intervalId);
+                    nextLane();
+                }
+                duration--;
+            }, 1000);
+        }
+
+        function nextLane() {
+            updateTrafficLights();
+            currentLane = (currentLane + 1) % 4;
+            updateTrafficLights();
+            greenLight();
+        }
+
+        function startSystem() {
+            currentLane = 0;
+            updateTrafficLights();
+            greenLight();
+        }
+    </script>
+
+    <div class="video-container">
+        <video class="vid" controls src="Traffic - Copy.mp4"></video>
+        <video class="vid1" controls src="Traffic1.mp4"></video>
+    </div>
+</body>
+</html>
