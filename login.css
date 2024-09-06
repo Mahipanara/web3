@@ -1,0 +1,144 @@
+* {
+    color:white ;
+}
+
+
+/* Center container for image and lights */
+#container {
+    position: relative;
+    width: 80vw; /* Adjust width to be responsive */
+    height: 80vh; /* Adjust height to be responsive */
+    margin: 100px auto; /* Adjust margin for better alignment */
+    padding-top: 70px;
+    max-width: 1000px; /* Maximum width to ensure it doesn't get too large */
+}
+
+/* Background image styling */
+#background-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+/* Traffic lights positioning and styling */
+.traffic-light {
+    width: 30px;
+    height: 90px;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    z-index: 2;
+}
+
+#a1 {
+    top: 17%;
+    left: 60%;
+}
+
+#a2 {
+    bottom: 20%;
+    left: 36%;
+}
+
+#a3 {
+    top: 17%;
+    left: 36%;
+}
+
+#a4 {
+    top:60%;
+    right: 35%;
+}
+
+.light {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: gray;
+}
+
+.red {
+    background-color: red;
+}
+
+.green {
+    background-color: green;
+}
+
+.yellow {
+    background-color: yellow;
+}
+
+/* Side boxes for vehicle counts */
+.side-box {
+    position: absolute;
+    z-index: 2;
+    width: 200px; /* Fixed width for boxes */
+    height: 120px; /* Fixed height for boxes */
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 2px solid black;
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    overflow: hidden; /* Prevent text from overflowing */
+}
+
+/* Adjust positions for responsive design */
+#box-top {
+    top: 0%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#box-bottom {
+    bottom: 0%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#box-left {
+    top: 50%;
+    left: 0%;
+    transform: translateY(-50%);
+}
+
+#box-right {
+    top: 50%;
+    right: 0%;
+    transform: translateY(-50%);
+}
+
+/* Timer styling within boxes */
+.side-box p {
+    margin: 5px 0;
+    font-size: 16px; /* Adjust font size for better readability */
+}
+
+#timer1, #timer2, #timer3, #timer4 {
+    font-weight: bold;
+    font-size: 16px; /* Adjust font size for consistency */
+    color: white;
+}
+
+.video-container {
+    display: flex;
+    justify-content: center; /* Centers the videos horizontally */
+    align-items: center; /* Aligns the videos vertically */
+    gap: 20px; /* Space between the two videos */
+    margin-top: 300px; /* Adjust the top margin to control distance from other elements */
+    margin-bottom: 100px;
+}
+
+
+/* Individual video styles */
+.vid, .vid1 {
+    width: 45%; /* Set width for the videos to make them fit side by side */
+    height: auto; /* Ensure the video height scales proportionally */
+}
